@@ -1,0 +1,26 @@
+Gestion utilisateur
+- sudo adduser XXX
+- sudo visudo
+# includedir
+XXX ALL=(ALL) NOPASSWD: ALL
+- passwd -l pi
+
+Gestion nom machine
+- sudo nano /etc/hostname
+- sudo nano /etc/hosts
+
+Gestion réseau
+- sudo nano /etc/network/interfaces
+- sudo nano /etc/resolv.conf
+
+Gestion DHCP
+- sudo ifup eth1
+- sudo apt-get install isc-dhcp-server
+- sudo nano /etc/dhcp/dhcpd.conf
+- (sudo) echo 1 > /proc/sys/net/ipv4/ip_forward = 1
+- sudo service isc-dhcp-server (re)start
+
+Gestion parefeu
+- sudo apt-get install fail2ban
+- modifier /etc/fail2ban/jail.conf
+- service fail2ban restart
