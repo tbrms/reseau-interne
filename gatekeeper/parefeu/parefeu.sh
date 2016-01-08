@@ -1,14 +1,5 @@
-### BEGIN INIT INFO
-# Provides:          mesReglesIptables
-# Required-Start:    $remote_fs $syslog
-# Required-Stop:     $remote_fs $syslog
-# Default-Start:     2 3 4 5
-# Default-Stop:      0 1 6
-# Short-Description: Demarrage du script lors de la sequence de boot
-# Description:       Ajout des regles de parefeu
-### END INIT INFO
-
 #!/bin/sh
+
 case "$1" in
 start)
 
@@ -18,15 +9,6 @@ echo - Initialisation :
 iptables -t filter -F
 iptables -t filter -X
 echo - Vidage des regles et des tables : [OK]
-
-;;
-
-dhcp)
-
-sudo ifup eth1
-echo - eth1 up : OK
-sudo service isc-dhcp-server start
-echo - dhcp : OK
 
 ;;
 
@@ -60,13 +42,13 @@ iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport 22 -j ACCEPT
 
 # Autoriser DNS
-iptables -t filter -A OUTPUT -p tcp --dport 53 -j ACCEPT
-iptables -t filter -A OUTPUT -p udp --dport 53 -j ACCEPT
+#iptables -t filter -A OUTPUT -p tcp --dport 53 -j ACCEPT
+#iptables -t filter -A OUTPUT -p udp --dport 53 -j ACCEPT
 iptables -t filter -A INPUT -p tcp --dport 53 -j ACCEPT
 iptables -t filter -A INPUT -p udp --dport 53 -j ACCEPT
 
 # Autoriser NTP
-#iptables -t filter -A OUTPUT -p udp --dport 123 -j ACCEPT
+iptables -t filter -A OUTPUT -p udp --dport 123 -j ACCEPT
 
 # Autoriser FTP
 #modprobe ip_conntrack_ftp
@@ -77,9 +59,9 @@ iptables -t filter -A INPUT -p udp --dport 53 -j ACCEPT
 # Autoriser HTTP et HTTPS
 iptables -t filter -A OUTPUT -p tcp --dport 80 -j ACCEPT
 iptables -t filter -A INPUT -p tcp --dport 80 -j ACCEPT
-iptables -t filter -A OUTPUT -p tcp --dport 443 -j ACCEPT
-iptables -t filter -A INPUT -p tcp --dport 443 -j ACCEPT
-iptables -t filter -A INPUT -p tcp --dport 8443 -j ACCEPT
+#iptables -t filter -A OUTPUT -p tcp --dport 443 -j ACCEPT
+#iptables -t filter -A INPUT -p tcp --dport 443 -j ACCEPT
+#iptables -t filter -A INPUT -p tcp --dport 8443 -j ACCEPT
 
 # Autoriser POP3
 #iptables -t filter -A INPUT -p tcp --dport 110 -j ACCEPT
@@ -105,16 +87,57 @@ iptables -t filter -A INPUT -p tcp --dport 8443 -j ACCEPT
 echo - Initialisation du parefeu : [OK]
 
 ;;
+
 forward)
 
 #forward the packets from your internal network, on /dev/eth1, to your external network on /dev/eth0
 echo - Initialisation du forward 
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 iptables -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
-iptables -A FORWARD -i eth1 -o eth0 -j ACCEPT
+#iptables -A FORWARD -i eth1 -o eth0 -j DROP
+#http - https
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 80 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 80 -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 443 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 443 -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 8443 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 8443 -j  ACCEPT
+#dns
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 53 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 53 -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p udp  --dport 53 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p udp  --dport 53 -j  ACCEPT
+#POP
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 110 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 110 -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 995 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 995 -j  ACCEPT
+
+#IMAP
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 143 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 143 -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport 993 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport 993 -j  ACCEPT
+
+#ping
+#iptables -A FORWARD -i eth1 -o eth0 -p icmp -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j  ACCEPT
+#iptables -A FORWARD -i eth1 -o eth0 -p icmp -m state --state NEW,ESTABLISHED,RELATED -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p icmp -m state --state NEW,ESTABLISHED,RELATED -j  ACCEPT 
+iptables -A FORWARD -i eth1 -o eth0 -p icmp --icmp-type echo-reply -m state --state NEW,ESTABLISHED,RELATED -j  ACCEPT
+iptables -A FORWARD -i eth1 -o eth0 -p icmp --icmp-type echo-request -m state --state NEW,ESTABLISHED,RELATED -j  ACCEPT
+
+#NTP
+iptables -A FORWARD -i eth1 -o eth0 -p udp  --dport 123 -j  ACCEPT
+iptables -A FORWARD -i eth0 -o eth1 -p udp  --dport 123 -j  ACCEPT
+
+
+#DROP ALL
+iptables -A FORWARD -i eth1 -o eth0 -j DROP
+
 echo - Initialisation du forward : [OK]
 
 ;;
+
 status)
 
 echo - Liste des regles :
