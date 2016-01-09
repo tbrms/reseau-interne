@@ -33,22 +33,20 @@ iptables -t filter -A OUTPUT -o lo -j ACCEPT
 # Autoriser le ping
 iptables -t filter -A INPUT -p icmp -j ACCEPT
 iptables -t filter -A OUTPUT -p icmp -j ACCEPT
-# Autoriser SSH
-iptables -t filter -A INPUT -p tcp --dport 22 -j ACCEPT
-iptables -t filter -A OUTPUT -p tcp --dport 22 -j ACCEPT
-# Autoriser DNS
-iptables -t filter -A OUTPUT -p tcp --dport 53 -j ACCEPT
-iptables -t filter -A OUTPUT -p udp --dport 53 -j ACCEPT
-iptables -t filter -A INPUT -p tcp --dport 53 -j ACCEPT
-iptables -t filter -A INPUT -p udp --dport 53 -j ACCEPT
-# Autoriser NTP
-iptables -t filter -A OUTPUT -p udp --dport 123 -j ACCEPT
-# Autoriser HTTP et HTTPS
-iptables -t filter -A OUTPUT -p tcp --dport 80 -j ACCEPT
-iptables -t filter -A INPUT -p tcp --dport 80 -j ACCEPT
-#iptables -t filter -A OUTPUT -p tcp --dport 443 -j ACCEPT
-#iptables -t filter -A INPUT -p tcp --dport 443 -j ACCEPT
-#iptables -t filter -A INPUT -p tcp --dport 8443 -j ACCEPT
+
+#SSH(22) DNS(53) HTTP(80)
+for portTcp in 22 53 80
+do
+iptables -t filter -A INPUT -p tcp --dport portTcp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport portTcp -j ACCEPT
+done
+
+#DNS(53) NTP(123)
+for portUdp in 53 123
+do
+iptables -t filter -A INPUT -p tcp --dport portUdp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport portUdp -j ACCEPT
+done
 echo - Initialisation du parefeu : [OK]
 ;;
 
