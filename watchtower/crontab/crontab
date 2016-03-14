@@ -1,0 +1,2 @@
+# Suppression des fichiers de plus de 30 jours
+0 3 * * * /usr/bin/find /var/tmp/ntopng/*/top_talkers/* -mtime +30 -delete
