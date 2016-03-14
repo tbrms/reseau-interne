@@ -1,0 +1,3 @@
+sudo apt-get install ntopng
+
+Ajouter le crontab pour vider régulièrement les données 
