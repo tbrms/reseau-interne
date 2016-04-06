@@ -1,0 +1,1 @@
+nohup sudo streamripper http://91.121.22.39:8010/ -d /home/koun/disk1 -l 7200 -D %S%d &
