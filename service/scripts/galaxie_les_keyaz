@@ -1,1 +1,1 @@
-nohup sudo streamripper http://91.121.22.39:8010/ -d /home/koun/disk2/les_keyaz -l 3600 -D %S%d &
+nohup sudo streamripper http://91.121.22.39:8010/ -d /home/xxx/disk2/les_keyaz -l 3600 -D %S%d &
