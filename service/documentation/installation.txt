@@ -1,0 +1,13 @@
+Gestion montage clé USB
+sudo blkid
+sudo /etc/fstab
+UUID= « 5C4A-1111 » « vfat »
+UUID= 587A-5048 /home/xxx/disk1 vfat defaults 0 0
+UUID= 5C4A-1111 /home/xxx/disk2 vfat defaults 0 0
+
+Gestion samba
+sudo apt-get install samba
+mkdir /home/xxx/share/disk1
+smbpasswd -a user
+groupadd smbusers
+chown:smbusers /home/xxx/share/disk1
