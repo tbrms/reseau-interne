@@ -11,3 +11,13 @@ mkdir /home/xxx/share/disk1
 smbpasswd -a user
 groupadd smbusers
 chown:smbusers /home/xxx/share/disk1
+
+Gestion client no-ip
+- cd /usr/local/src
+- wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
+- tar xzf noip-duc-linux.tar.gz
+- cd no-ip-2.1.9
+- make
+- make install
+- /usr/local/bin/noip2 -C   (dash capital C, this will create the default config file)
+- /usr/local/bin/noip2
