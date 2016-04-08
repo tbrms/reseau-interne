@@ -42,7 +42,7 @@ iptables -t filter -A OUTPUT -p tcp --dport portTcp -j ACCEPT
 done
 
 #DNS(53) NTP(123)
-for portUdp in 53 123
+for portUdp in 53 123 8010
 do
 iptables -t filter -A INPUT -p tcp --dport portUdp -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport portUdp -j ACCEPT
@@ -59,13 +59,13 @@ iptables -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCE
 
 # HTTP(80 443 8443) DNS(53) POP(110 995) IMAP(143 993)
 # NTP(123)
-for portTcp in 80 443 8443 53 110 995 143 993
+for portTcp in 80 443 8443 53 110 995 143 993 8010 587 465 25
 do
 iptables -A FORWARD -i eth1 -o eth0 -p tcp  --dport $portTcp -j  ACCEPT
 iptables -A FORWARD -i eth0 -o eth1 -p tcp  --dport $portTcp -j  ACCEPT
 done
 
-for portUdp in 53 123
+for portUdp in 53 123 8010
 do
 iptables -A FORWARD -i eth1 -o eth0 -p udp  --dport $portUdp -j  ACCEPT
 iptables -A FORWARD -i eth0 -o eth1 -p udp  --dport $portUdp -j  ACCEPT
