@@ -1,0 +1,83 @@
+#!/bin/sh
+
+case "$1" in
+
+start)
+
+echo - Initialisation 
+# Vidage des tables et des regles personnelles
+iptables -t filter -F
+iptables -t filter -X
+echo - Vidage des regles et des tables : [OK]
+;;
+
+parefeu)
+
+echo - Initialisation du parefeu:
+# Interdire toutes connexions entrantes et sortantes
+iptables -t filter -P INPUT DROP
+iptables -t filter -P FORWARD DROP
+iptables -t filter -P OUTPUT DROP
+echo - Interdire toutes les connexions entrantes et sortantes : [OK]
+
+# Ne pas casser les connexions etablies
+iptables -A INPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -A OUTPUT -m state --state RELATED,ESTABLISHED -j ACCEPT
+echo - Ne pas casser les connexions établies : [OK]
+
+########## Regles ##########
+
+# Autoriser loopback
+iptables -t filter -A INPUT -i lo -j ACCEPT
+iptables -t filter -A OUTPUT -o lo -j ACCEPT
+# Autoriser le ping
+iptables -t filter -A INPUT -p icmp -j ACCEPT
+iptables -t filter -A OUTPUT -p icmp -j ACCEPT
+
+#SSH(22) DNS(53) HTTP(80)
+for portTcp in 22 53 80
+do
+iptables -t filter -A INPUT -p tcp --dport portTcp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport portTcp -j ACCEPT
+done
+
+#DNS(53) NTP(123)
+for portUdp in 53 123 8010
+do
+iptables -t filter -A INPUT -p tcp --dport portUdp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport portUdp -j ACCEPT
+done
+echo - Initialisation du parefeu : [OK]
+;;
+
+forward)
+
+#forward the packets from your internal network, on /dev/eth1, to your external network on /dev/eth0
+echo - Initialisation du forward 
+iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+iptables -A FORWARD -i eth0 -o eth1 -m state --state RELATED,ESTABLISHED -j ACCEPT
+iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 3128
+echo - Initialisation du forward : [OK]
+;;
+
+status)
+
+echo - Liste des regles :
+iptables -n -L
+;;
+
+stop)
+
+# Vidage des tables et des regles personnelles
+iptables -t filter -F
+iptables -t filter -X
+echo - Vidage des regles et des tables : [OK]
+
+iptables -P INPUT ACCEPT
+iptables -P FORWARD ACCEPT
+iptables -P OUTPUT ACCEPT
+echo - Autoriser toutes les connexions entrantes et sortantes : [OK]
+;;
+
+esac
+exit 0
