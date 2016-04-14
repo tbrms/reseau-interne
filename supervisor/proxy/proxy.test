@@ -4,7 +4,7 @@
 # (c) 2006, nixCraft under GNU/GPL v2.0+
 # -------------------------------------------------------------------------------------
 # squid server IP
-SQUID_SERVER="192.168.1.1"
+SQUID_SERVER="172.16.0.65"
 # Interface connected to Internet
 INTERNET="eth0"
 # Interface connected to LAN
