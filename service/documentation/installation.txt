@@ -1,9 +1,12 @@
 Gestion montage clé USB
 sudo blkid
+-> recuperer les UUID
+mkdir /home/xxx/disk1
+mkdir /home/xxx/disk2
 sudo /etc/fstab
-UUID= « 5C4A-1111 » « vfat »
-UUID= 587A-5048 /home/xxx/disk1 vfat defaults 0 0
-UUID= 5C4A-1111 /home/xxx/disk2 vfat defaults 0 0
+UUID=587A-5048 /home/xxx/disk1 vfat defaults 0 0
+UUID=5C4A-1111 /home/xxx/disk2 vfat defaults 0 0
+sudo mount -a
 
 Gestion samba
 sudo apt-get install samba
