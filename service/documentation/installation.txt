@@ -15,6 +15,9 @@ smbpasswd -a user
 groupadd smbusers
 chown:smbusers /home/xxx/share/disk1
 
+Gestion Streamripper
+sudo apt-get install streamripper
+
 Gestion client no-ip
 - cd /usr/local/src
 - wget http://www.no-ip.com/client/linux/noip-duc-linux.tar.gz
