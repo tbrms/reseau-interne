@@ -17,6 +17,16 @@ chown:smbusers /home/xxx/share/disk1
 
 Gestion Streamripper
 sudo apt-get install streamripper
+Créer les répertoires nécessaires
+
+Script d'enregistrement
+nohup sudo streamripper http://91.121.22.39:8010/ -d /home/xxx/disk1 -l 7200 -D %S%d &
+
+Gestion Crontab
+0 14 * * 0 /usr/bin/galaxie2h
+0 23 * * 5 /usr/bin/galaxie_les_keyaz
+0 1 * * 6 /usr/bin/galaxie_silver_cee
+0 10 * * 0,6 /usr/bin/galaxie_sound_system
 
 Gestion client no-ip
 - cd /usr/local/src
