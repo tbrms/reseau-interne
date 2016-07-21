@@ -1,0 +1,34 @@
+#!/bin/sh
+start()
+{
+     # Mettez ici le démarrage de votre programme
+	sudo touch /home/koun/server.log
+	sudo echo `date` `hostname`: [START] >> server.log
+	
+}
+
+stop()
+{
+     # Mettez ici un kill sur votre programme
+	sudo touch /home/koun/server.log
+	sudo echo `date` `hostname`: [STOP] >> server.log
+}
+
+restart()
+{
+    stop;
+    sleep 1;
+    start;
+}
+case $1 in
+start) 
+      start;;
+stop)
+      stop;;
+restart)
+      restart;;
+*)
+      start;;
+esac
+
+exit 0
