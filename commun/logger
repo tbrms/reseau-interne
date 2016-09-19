@@ -2,7 +2,7 @@
 start()
 {
      # Mettez ici le démarrage de votre programme
-	sudo touch /home/koun/server.log
+	sudo touch /home/xxx/server.log
 	sudo echo `date` `hostname`: [START] >> server.log
 	
 }
@@ -10,7 +10,7 @@ start()
 stop()
 {
      # Mettez ici un kill sur votre programme
-	sudo touch /home/koun/server.log
+	sudo touch /home/xxx/server.log
 	sudo echo `date` `hostname`: [STOP] >> server.log
 }
 
