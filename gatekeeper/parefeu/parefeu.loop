@@ -42,7 +42,7 @@ iptables -t filter -A OUTPUT -p tcp --dport portTcp -j ACCEPT
 done
 
 #DNS(53) NTP(123)
-for portUdp in 53 123 8010
+for portUdp in 53 80 123 8010
 do
 iptables -t filter -A INPUT -p tcp --dport portUdp -j ACCEPT
 iptables -t filter -A OUTPUT -p tcp --dport portUdp -j ACCEPT
