@@ -1,1 +1,3 @@
-nohup sudo streamripper http://91.121.22.39:8010/ -d /home/xxx/disk2/les_keyaz -l 3600 -D %S%d &
+#nohup sudo streamripper http://91.121.22.39:8010/ -d /home/xxx/disk2/les_keyaz -l 3600 -D %S%d &
+nohup sudo streamripper https://www.radioking.com/play/galaxieradio -d /home/xxx/disk2/les_keyaz -l 3600 -a &
+
