@@ -1,0 +1,12 @@
+Ajout du server web
+[TODO] installation apache
+
+Creation de la page
+Copier la page html dans le repertoire d'apache
+
+Ajout du script cam.sh
+sudo nano /home/xxx/cam.sh
+
+Creation du crontab
+sudo crontab -e
+* * * * * sudo /home/xxx/cam.sh
