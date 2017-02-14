@@ -1,0 +1,80 @@
+http://hardware-libre.fr/2014/02/raspberry-pi-creer-un-point-dacces-wifi/
+
+sudo apt-get update
+sudo apt-get install hostapd iptables dnsmasq
+
+lsusb
+
+Si carte wifi basée sur un chipset Realtek RTL8188CUS:
+  cd /tmp
+  sudo wget http://fichiers.touslesdrivers.com/39144/RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip
+  sudo unzip RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911.zip
+  cd RTL8188C_8192C_USB_linux_v4.0.2_9000.20130911
+  cd wpa_supplicant_hostapd
+  sudo tar -xvf wpa_supplicant_hostapd-0.8_rtw_r7475.20130812.tar.gz
+  cd wpa_supplicant_hostapd-0.8_rtw_r7475.20130812
+  cd hostapd
+  sudo make
+
+Si la commande wget de départ ne fonctionne pas, vous pouvez télécharger le pilote manellement
+sur le site de Realtek et continuer la procédure avec le unzip:
+  http://www.realtek.com.tw/downloads/downloadsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&DownTypeID=3&GetDown=false
+
+sudo make install
+sudo mv hostapd /usr/sbin/hostapd
+sudo chown root.root /usr/sbin/hostapd
+sudo chmod 755 /usr/sbin/hostapd
+
+sudo nano /etc/hostapd/hostapd.conf
+  ctrl_interface=/var/run/hostapd
+  driver=rtl871xdrv
+  ieee80211n=1
+  ctrl_interface_group=0
+  beacon_int=100
+  interface=wlan0
+  ssid=hotspotTN
+  hw_mode=g
+  channel=6
+  auth_algs=1
+  wmm_enabled=1
+  eap_reauth_period=360000000
+  macaddr_acl=0
+  ignore_broadcast_ssid=0
+  wpa=2
+  wpa_passphrase=loukiw21
+  wpa_key_mgmt=WPA-PSK
+  wpa_pairwise=TKIP
+  rsn_pairwise=CCMP
+  
+sudo nano /etc/dnsmasq.conf
+  interface=wlan0
+  dhcp-range=192.168.200.100,192.168.200.200,255.255.255.0,12h
+  
+sudo nano /etc/sysctl.conf
+  net.ipv4.ip_forward=1
+  
+sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
+sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT
+sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+
+sudo nano /etc/network/interfaces
+  auto eth0
+  allow-hotplug eth0
+  iface eth0 inet dhcp
+
+  allow-hotplug wlan0
+  iface wlan0 inet static
+  address 192.168.200.1
+  netmask 255.255.255.0
+  network 192.168.200.0
+  broadcast 192.168.200.255
+
+  up iptables-restore < /etc/iptables.ipv4.nat
+  
+sudo service dnsmasq start
+sudo service hostapd start
+
+Si vous le désirez, vous pouvez lancer le pont d’accès comme daemon au démarrage du système :
+  sudo nano /etc/default/hostapd
+  Remplacez la ligne #DAEMON_CONF= » » par DAEMON_CONF= »/etc/hostapd/hostapd.conf »
