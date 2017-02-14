@@ -23,10 +23,13 @@ Script d'enregistrement
 nohup sudo streamripper http://91.121.22.39:8010/ -d /home/xxx/disk1 -l 7200 -D %S%d &
 
 Gestion Crontab
-0 14 * * 0 /usr/bin/galaxie2h
+0 14 * * 0 /usr/bin/galaxie_mickaelH_sharkam
 0 23 * * 5 /usr/bin/galaxie_les_keyaz
 0 1 * * 6 /usr/bin/galaxie_silver_cee
-0 10 * * 0,6 /usr/bin/galaxie_sound_system
+0 10 * * 0,6 /usr/bin/galaxie_retro
+# 0 0 * * 0,6 /usr/bin/galaxie4h
+# 0 4 * * 0,6 /usr/bin/galaxie4h
+
 
 Gestion client no-ip
 - cd /usr/local/src
