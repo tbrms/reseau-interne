@@ -13,5 +13,3 @@ then
     ifdown --force wlan0
     ifup wlan0
 fi
-
-sleep 60
