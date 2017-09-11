@@ -1,0 +1,122 @@
+#!/bin/bash
+
+echo "[..] Creation des listes"
+listeRetro=`ls /home/xxx/disk1/retro/GalaxieRadio/sr_program_*.mp3 2>/dev/null`
+listeRetroCue=`ls /home/xxx/disk1/retro/GalaxieRadio/sr_program_*.cue 2>/dev/null`
+listeMhs=`ls /home/xxx/disk2/mickaelH_sharkam/GalaxieRadio/sr_program_*.mp3 2>/dev/null`
+listeMhsCue=`ls /home/xxx/disk2/mickaelH_sharkam/GalaxieRadio/sr_program_*.cue 2>/dev/null`
+listeKeyaz=`ls /home/xxx/disk2/les_keyaz/GalaxieRadio/sr_program_*.mp3 2>/dev/null`
+listeKeyazCue=`ls /home/xxx/disk2/les_keyaz/GalaxieRadio/sr_program_*.cue 2>/dev/null`
+listeSc=`ls /home/xxx/disk2/silver_cee/GalaxieRadio/sr_program_*.mp3 2>/dev/null`
+listeScCue=`ls /home/xxx/disk2/silver_cee/GalaxieRadio/sr_program_*.cue 2>/dev/null`
+echo "[OK] Creation des listes"
+echo "[..] Debut de traitement"
+# Retro
+if [[  $listeRetro ]]; then
+ echo "[..] Retro - Traitement"
+ for fichier in $listeRetro;
+ do
+  echo "[..] Retro - Deplacement en cours : $fichier"
+  #cp $fichier $fichier.bak
+  mv $fichier /home/xxx/disk1/depot/`date -r $fichier '+%g%m%d'`-retro.mp3
+  echo "[OK] Retro - Deplacement de  $fichier"
+ done
+else
+ echo "[--] Retro - Pas de fichier a renommer"
+fi
+
+if [[  $listeRetroCue ]]; then
+for fichierCue in $listeRetroCue;
+ do
+  #cp  $fichierCue $fichierCue.bak
+  rm $fichierCue
+  echo "[OK] Retro - Suppression de: $fichierCue"
+ done
+else
+ echo "[--] Retro - Pas de fichier a supprimer"
+fi
+
+# MHS
+if [[  $listeMhs ]]; then
+ echo "[..] MHS   - Traitement"
+ for fichier in $listeMhs;
+ do
+  echo "[..] MHS   - Deplacement en cours : $fichier"
+  #cp $fichier $fichier.bak
+  mv $fichier /home/xxx/disk1/depot/`date -r $fichier '+%g%m%d'`-MHS.mp3
+  echo "[OK] MHS   - Deplacement de  $fichier"
+ done
+else
+ echo "[--] MHS   - Pas de fichier a renommer"
+fi
+
+if [[  $listeMhsCue ]]; then
+for fichierCue in $listeMhsCue;
+ do
+  #cp $fichierCue $fichierCue.bak
+  rm $fichierCue
+  echo "[OK] MHS   - Suppression de: $fichierCue"
+ done
+else
+ echo "[--] MHS   - Pas de fichier a supprimer"
+fi
+
+# Keyaz
+if [[  $listeKeyaz ]]; then
+ echo "[..] Keyaz - Traitement"
+ for fichier in $listeKeyaz;
+ do
+  echo "[..] Keyaz - Deplacement en cours : $fichier"
+  #cp $fichier $fichier.bak
+  mv $fichier /home/xxx/disk1/depot/`date -r $fichier '+%g%m%d'`-Keyaz.mp3
+  echo "[OK] Keyaz - Deplacement de  $fichier"
+ done
+else
+ echo "[--] Keyaz - Pas de fichier a renommer"
+fi
+
+if [[  $listeKeyazCue ]]; then
+for fichierCue in $listeKeyazCue;
+ do
+  #cp $fichierCue $fichierCue.bak
+  rm $fichierCue
+  echo "[OK] Keyaz - Suppression de: $fichierCue"
+ done
+else
+ echo "[--] Keyaz - Pas de fichier a supprimer"
+fi
+
+# Silver Cee
+if [[  $listeSc ]]; then
+ echo "[..] SC    - Traitement"
+ for fichier in $listeSc;
+ do
+  echo "[..] SC    - Deplacement en cours : $fichier"
+  #cp $fichier $fichier.bak
+  mv $fichier /home/xxx/disk1/depot/`date -r $fichier '+%g%m%d'`-SC.mp3
+  echo "[OK] SC - deplacement de  $fichier"
+ done
+else
+ echo "[--] SC    - Pas de fichier a renommer"
+fi
+
+if [[  $listeScCue ]]; then
+for fichierCue in $listeScCue;
+ do
+  #cp $fichierCue $fichierCue.bak
+  rm $fichierCue
+  echo "[OK] SC    - Suppression de: $fichierCue"
+ done
+else
+ echo "[--] SC    - Pas de fichier a supprimer"
+
+fi
+
+echo "[  ] Generation de la playlist"
+/usr/bin/galaxiePlaylist
+echo "[OK] Generation de la playlist"
+
+
+echo "[OK] Fin de traitement"
+
+exit 0
