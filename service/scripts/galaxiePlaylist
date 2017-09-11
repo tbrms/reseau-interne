@@ -1,0 +1,75 @@
+#!/bin/sh
+
+# Chemin des musiques
+if [ $# = 1 ]; then
+	music="${1}"
+else
+	music="/home/xxx/disk1/depot"
+fi
+
+# Liste des formats : ajouter ceux supportés par le lecteur utilisé
+# listeFormats='mp3 ogg flac wav wma class mp2 mpc'
+listeFormats='mp3'
+
+# Nom des playlists
+playlistTemp='GalaxieFMTemp.m3u'
+playlist='GalaxieFM.m3u'
+
+# Fichier temporaire pour parcourir le résultat de ls
+listingRep="/home/xxx/.playlistGenerator"
+
+# Fichier de log
+dateLog=`date "+%Y%m"`
+logFile="/home/xxx/playlistGenerator_${dateLog}.log"
+
+echo "### "`date "+%Y-%m-%d %H:%M:%S"` "DEMARRAGE DE LA GENERATION DES PLAYLISTS ###" >> $logFile
+
+echo `date "+%Y-%m-%d %H:%M:%S"` ": Nettoyage des repertoires" >> $logFile
+
+# Nettoyage des répertoires
+find "${music}" -type f -name "Thumbs.db" -delete
+find "${music}" -type d -name "@eaDir" -exec rm -Rf {} \;
+
+echo `date "+%Y-%m-%d %H:%M:%S"` ": Suppression des playlists" >> $logFile
+
+# Suppression des playlists
+find "${music}" -type f -name "${playlist}" -delete
+
+echo `date "+%Y-%m-%d %H:%M:%S"` ": Listing des repertoires" >> $logFile
+
+# Listing des répertoires
+find "${music}" -type d | sort > "${listingRep}"
+
+echo `date "+%Y-%m-%d %H:%M:%S"` ": Edition des playlists" >> $logFile
+
+# On parcours les sous-dossiers
+cat "${listingRep}" |
+	while read rep; do
+		cd "${rep}"
+		echo `pwd`
+
+		# Création de la playlist
+		> "${rep}/${playlistTemp}"
+
+		# Boucle sur les extensions
+		for ext in $listeFormats; do
+			# Edition de la playlist
+			find . -type f -iname "*.${ext}" | sort >> "${rep}/${playlistTemp}"
+		done
+
+                sed 's/.\///' "${playlistTemp}" >> "${playlist}"
+    		rm "${rep}/${playlistTemp}"
+
+		# Suppression de la playlist si elle est vide
+		if [ ! -s "${rep}/${playlist}" ]; then
+			echo "Aucune musique dans le repertoire ${rep}"
+			rm "${rep}/${playlist}"
+		fi
+	done > /dev/null
+
+echo `date "+%Y-%m-%d %H:%M:%S"` ": Suppression du listing des repertoires" >> $logFile
+	
+# Suppression du listing des répertoires
+rm "${listingRep}"
+
+echo "### "`date "+%Y-%m-%d %H:%M:%S"`" : FIN DE LA GENERATION DES PLAYLISTS ###" >> $logFile
