@@ -1,0 +1,2 @@
+* 0-5,23* * * * /home/xxx/cam.sh
+* 6-22 * * * /home/xxx/camHD.sh
