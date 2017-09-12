@@ -8,5 +8,3 @@ Ajout du script cam.sh
 sudo nano /home/xxx/cam.sh
 
 Creation du crontab
-sudo crontab -e
-* * * * * sudo /home/xxx/cam.sh
