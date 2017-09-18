@@ -1,0 +1,2 @@
+UUID=41DA-F3B3 /home/xxx/disk1 vfat umask=022,uid=1001,gid=1002,utf8 0 0
+UUID=7788-4EE4 /home/xxx/disk2 vfat umask=022,uid=1001,gid=1002,utf8 0 0
