@@ -1,0 +1,2 @@
+* * * * * /home/xxx/sauvegardeCam
+* * * * * sudo /usr/bin/find /home/xxx/disk1/* -mtime +3 -delete
