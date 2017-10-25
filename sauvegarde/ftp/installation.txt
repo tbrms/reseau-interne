@@ -1,0 +1,13 @@
+sudo apt-get install vsftpd
+
+sudo nano /etc/vsftpd.conf
+
+Changer:
+Anonymous_enabled=YES en Anonymous_enabled=NO
+
+Décommenter:
+Local_enable = YES
+local_unmask=022
+Write_enabled=YES
+Ascii_upload_enabled=YES
+Ascii_download_enabled=YES
