@@ -37,15 +37,15 @@ iptables -t filter -A OUTPUT -p icmp -j ACCEPT
 #SSH(22) DNS(53) HTTP(80)
 for portTcp in 22 53 80
 do
-iptables -t filter -A INPUT -p tcp --dport portTcp -j ACCEPT
-iptables -t filter -A OUTPUT -p tcp --dport portTcp -j ACCEPT
+iptables -t filter -A INPUT -p tcp --dport $portTcp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport $portTcp -j ACCEPT
 done
 
 #DNS(53) NTP(123)
 for portUdp in 53 80 123 8010
 do
-iptables -t filter -A INPUT -p tcp --dport portUdp -j ACCEPT
-iptables -t filter -A OUTPUT -p tcp --dport portUdp -j ACCEPT
+iptables -t filter -A INPUT -p tcp --dport $portUdp -j ACCEPT
+iptables -t filter -A OUTPUT -p tcp --dport $portUdp -j ACCEPT
 done
 echo - Initialisation du parefeu : [OK]
 ;;
